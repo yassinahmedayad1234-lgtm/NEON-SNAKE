@@ -23,16 +23,20 @@ jobs:
           sudo apt-get install -y \
             python3-pip \
             python3-venv \
-            git \
-            zip \
-            unzip \
-            autoconf \
-            libtool \
-            pkg-config \
-            zlib1g-dev \
-            libffi-dev \
-            libssl-dev \
-            build-essential
+            git zip unzip \
+            autoconf libtool pkg-config \
+            zlib1g-dev libffi-dev libssl-dev \
+            build-essential libltdl-dev cmake
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android build tools
+        run: |
+          sdkmanager "platform-tools" \
+            "platforms;android-35" \
+            "build-tools;35.0.0" \
+            "cmdline-tools;latest"
 
       - name: Build APK
         uses: digreatbrian/buildozer-action@v1
@@ -44,4 +48,5 @@ jobs:
         with:
           name: NEON-SNAKE-APK
           path: bin/*.apk
+          if-no-files-found: error
           
